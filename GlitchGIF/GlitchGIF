@@ -1,0 +1,28 @@
+import os, pathlib, random
+from PIL import Image
+from glitch_this import ImageGlitcher
+
+# Path
+dirPath = pathlib.Path(__file__).parent.absolute()
+inPath = str(dirPath) + ".\input\\"
+outPath = str(dirPath) + ".\output\\"
+
+dirs =os.listdir(inPath)
+
+# Glitcher
+glitcher = ImageGlitcher()
+DURATION = 200
+LOOP = 0
+
+# Seed
+random.seed(random.randint(1,99999999999))
+seed = random.random()
+def Glitch():
+    for item in dirs:
+        img = Image.open(inPath + item)
+        glitch_img, src_gif_duration, src_gif_frames = glitcher.glitch_gif(img,2,color_offset=True,scan_lines=True)
+        f,e = os.path.splitext(outPath + item)
+        glitch_img[0].save(f+'.gif',format='GIF',append_images= glitch_img[1:],save_all=True,duration=DURATION,loop=LOOP)
+
+if __name__ == "__main__":
+    Glitch()
